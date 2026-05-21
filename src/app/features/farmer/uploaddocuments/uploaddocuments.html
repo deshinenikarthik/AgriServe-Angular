@@ -1,0 +1,134 @@
+<div class="flex h-screen bg-gray-50">
+  
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    
+    <app-header></app-header>
+
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+      <div class="max-w-[860px] mx-auto p-4 sm:p-6 lg:p-8">
+       
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
+          <div>
+            <h1 class="text-[22px] font-medium text-gray-900 mb-1 tracking-tight">Upload Document</h1>
+            <p class="text-[13px] text-gray-500">Submit a document link for verification review by the AgriServe team.</p>
+          </div>
+          <a routerLink="/farmer/documents" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm shrink-0">
+            <i class="ti ti-arrow-left" aria-hidden="true"></i>
+            Back to Documents
+          </a>
+        </div>
+       
+        <div *ngIf="submitted" class="flex items-center gap-2.5 bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-[13px] text-green-800 font-medium mb-5 shadow-sm" role="alert">
+          <i class="ti ti-circle-check text-lg" aria-hidden="true"></i>
+          Document submitted successfully!
+        </div>
+       
+        <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-5 lg:p-6">
+       
+          <div class="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-8">
+       
+            <div class="flex flex-col gap-5">
+       
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5" for="farmerId">Farmer ID</label>
+                <input
+                  id="farmerId"
+                  class="block w-full border border-gray-300 bg-gray-50 text-gray-500 rounded-md px-3 py-2 text-sm shadow-sm cursor-not-allowed focus:outline-none"
+                  type="text"
+                  [value]="farmerIdDisplay"
+                  readonly
+                />
+                <span class="block text-[11px] text-gray-400 mt-1">Your registered farmer ID</span>
+              </div>
+       
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5" for="docType">
+                  Document Type <span class="text-red-500 ml-0.5">*</span>
+                </label>
+                <select
+                  id="docType"
+                  class="block w-full border border-gray-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  [(ngModel)]="documentType"
+                  name="documentType"
+                >
+                  <option value="" disabled>Select document type...</option>
+                  <option *ngFor="let type of documentTypes" [value]="type">{{ type }}</option>
+                </select>
+              </div>
+       
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5" for="driveLink">
+                  Document Link (Google Drive) <span class="text-red-500 ml-0.5">*</span>
+                </label>
+                
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="ti ti-link text-gray-400 text-lg" aria-hidden="true"></i>
+                  </div>
+                  <input
+                    id="driveLink"
+                    type="url"
+                    class="block w-full border border-gray-300 rounded-md pl-10 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition-colors"
+                    [(ngModel)]="driveLink"
+                    name="driveLink"
+                    placeholder="https://drive.google.com/file/d/..."
+                  />
+                </div>
+                
+                <p class="mt-1.5 flex items-start gap-1.5 text-[11px] text-gray-500 leading-tight">
+                  <i class="ti ti-info-circle text-blue-500 shrink-0 mt-0.5" aria-hidden="true"></i>
+                  <span>Ensure your Google Drive link access is set to <strong>"Anyone with the link"</strong> so the admin team can view it.</span>
+                </p>
+
+                <p *ngIf="errorMsg" class="flex items-center gap-1.5 text-xs text-red-500 mt-2 font-medium">
+                  <i class="ti ti-alert-circle" aria-hidden="true"></i>
+                  {{ errorMsg }}
+                </p>
+              </div>
+       
+              <div class="flex gap-3 mt-2">
+                <button
+                  class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  [disabled]="!isValid() || submitting"
+                  (click)="onSubmit()"
+                >
+                  <i class="ti text-lg" [ngClass]="submitting ? 'ti-loader animate-spin' : 'ti-upload'" aria-hidden="true"></i>
+                  {{ submitting ? 'Submitting...' : 'Submit Document' }}
+                </button>
+                <button class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm" 
+                        (click)="onCancel()">
+                  Cancel
+                </button>
+              </div>
+       
+            </div>
+       
+            <div class="hidden md:block bg-gray-50 rounded-xl p-5 border border-gray-100 h-fit">
+              <h3 class="text-[13px] font-semibold text-gray-900 mb-3.5">Accepted Documents</h3>
+              
+              <ul class="flex flex-col gap-2.5">
+                <li *ngFor="let type of documentTypes" class="flex items-center gap-2 text-xs text-gray-600">
+                  <i class="ti ti-circle-check text-green-500 text-[14px]" aria-hidden="true"></i>
+                  {{ type }}
+                </li>
+              </ul>
+              
+              <div class="h-px bg-gray-200 my-4"></div>
+              
+              <div class="flex items-start gap-2">
+                <i class="ti ti-info-circle text-[15px] text-blue-500 shrink-0 mt-0.5" aria-hidden="true"></i>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                  Uploaded documents are reviewed within <strong>3&ndash;5 business days</strong>. You'll see the status updated in My Documents.
+                </p>
+              </div>
+            </div>
+       
+          </div>
+        </div>
+       
+      </div>
+    </main>
+  </div>
+</div>

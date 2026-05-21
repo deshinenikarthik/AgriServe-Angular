@@ -1,0 +1,86 @@
+<div class="flex h-screen bg-slate-50 overflow-hidden text-slate-900 font-sans">
+  
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+    
+
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50/50">
+      
+      <div class="p-8 max-w-7xl mx-auto">
+        
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50/50 border-b border-slate-200">Workshop</th>
+                <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50/50 border-b border-slate-200">Schedule</th>
+                <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50/50 border-b border-slate-200">Location</th>
+                <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50/50 border-b border-slate-200">Status</th>
+                <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50/50 border-b border-slate-200 text-right">Actions</th>
+              </tr>
+            </thead>
+            
+            <tbody class="divide-y divide-slate-100">
+              @for (w of workshops; track w.workshopId) {
+                <tr class="hover:bg-slate-50/80 transition-colors group">
+                  
+                  <td class="px-6 py-4 text-sm align-middle">
+                    <div class="font-bold text-slate-900 mb-0.5">{{ w.title }}</div>
+                    <div class="text-xs font-medium text-slate-400">Officer ID: {{ w.officerId }}</div>
+                  </td>
+                  
+                  <td class="px-6 py-4 text-sm align-middle">
+                    <div class="font-bold text-slate-900">{{ w.date | date:'MMM d, y' }}</div>
+                    <div class="text-xs font-medium text-slate-500">{{ w.date | date:'h:mm a' }}</div>
+                  </td>
+                  
+                  <td class="px-6 py-4 text-sm align-middle">
+                    <div class="flex items-center gap-1.5 text-[13px] text-slate-600 font-medium">
+                      <svg class="text-slate-400" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      {{ w.location }}
+                    </div>
+                  </td>
+                  
+                  <td class="px-6 py-4 text-sm align-middle">
+                    <span [class]="getStatusClass(w.status)" 
+                          class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-opacity-50">
+                      {{ w.status }}
+                    </span>
+                  </td>
+                  
+                  <td class="px-6 py-4 text-sm align-middle text-right">
+                    <div class="flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <button class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" 
+                              title="Edit workshop" (click)="onEdit(w)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                      </button>
+                      <button class="p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors" 
+                              title="Delete workshop" (click)="onDelete(w.workshopId!)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                      </button>
+                    </div>
+                  </td>
+
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">
+                    <div class="text-center py-20 px-6 text-slate-400">
+                      <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-50 mb-4">
+                        <svg class="text-slate-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                      </div>
+                      <p class="font-bold text-slate-900 mb-1">No workshops scheduled yet</p>
+                      <span class="text-sm font-medium">Click "Schedule Workshop" to add one to this program</span>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+<div class="flex h-screen bg-gray-50">
+  
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    
+    <app-header></app-header>
+
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+      <div class="max-w-[1100px] mx-auto p-4 sm:p-6">
+       
+        <div class="flex items-start justify-between mb-5 gap-3">
+          <div>
+            <h1 class="text-[22px] font-medium text-gray-900 mb-1 tracking-tight">
+              Welcome back, {{ loading ? 'Loading...' : farmer.name }}!
+            </h1>
+            <p class="text-[13px] text-gray-500">Here's what's happening with your farm today.</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border" 
+                [ngClass]="farmer.status === 'Active' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-gray-50 text-gray-700 border-gray-200'">
+            <i class="ti ti-circle-check" aria-hidden="true"></i>
+            {{ farmer.status }} Farmer
+          </span>
+        </div>
+       
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+          
+          <div class="bg-white rounded-lg p-3.5 sm:p-4 flex flex-col border border-gray-200 shadow-sm">
+            <span class="text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">Total Land Size</span>
+            <div class="text-2xl font-medium text-gray-900 leading-tight flex items-baseline gap-1">
+              {{ farmer.landSize || 0 }}
+              <span class="text-sm font-normal text-gray-500">Acres</span>
+            </div>
+            <span class="text-[11px] text-gray-400 mt-1">Registered farm area</span>
+          </div>
+       
+          <div class="bg-white rounded-lg p-3.5 sm:p-4 flex flex-col border border-gray-200 shadow-sm">
+            <span class="text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">Primary Crop</span>
+            <div class="text-lg font-medium text-gray-900 leading-tight flex items-baseline gap-1">
+              {{ farmer.cropType || 'N/A' }}
+            </div>
+            <span class="text-[11px] text-gray-400 mt-1">Currently cultivating</span>
+          </div>
+       
+          <div class="bg-white rounded-lg p-3.5 sm:p-4 flex flex-col border border-gray-200 shadow-sm">
+            <span class="text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">My Workshops</span>
+            <div class="text-2xl font-medium text-gray-900 leading-tight flex items-baseline gap-1">
+              {{ workshops.length }}
+            </div>
+            <span class="text-[11px] text-gray-400 mt-1">Registered sessions</span>
+          </div>
+       
+          <div class="bg-white rounded-lg p-3.5 sm:p-4 flex flex-col border border-gray-200 shadow-sm">
+            <span class="text-[11px] uppercase tracking-wider text-gray-400 mb-1.5">Farmer ID</span>
+            <div class="text-base font-mono tracking-wide font-medium text-gray-900 leading-tight flex items-baseline gap-1">
+              FRM-{{ farmer.farmerId || '----' }}
+            </div>
+            <span class="text-[11px] text-gray-400 mt-1">{{ farmer.gender || '' }}</span>
+          </div>
+        </div>
+       
+        <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
+       
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-5">
+            <div class="flex justify-between items-center text-base font-semibold text-gray-900 mb-4">
+              My Upcoming Workshops
+              <a routerLink="/training" class="text-sm font-medium text-green-600 hover:text-green-700 transition-colors">View all &rarr;</a>
+            </div>
+       
+            <div *ngIf="workshops.length === 0" class="flex flex-col items-center justify-center text-center py-8">
+              <i class="ti ti-calendar-off text-3xl text-gray-300 mb-2" aria-hidden="true"></i>
+              <p class="text-sm font-medium text-gray-600">No workshops registered yet</p>
+              <small class="text-xs text-gray-400 mt-1">Browse training programs to register</small>
+            </div>
+       
+            <div *ngFor="let w of workshops; let last = last"
+                 class="flex items-start gap-3.5 py-3.5 border-b border-gray-100"
+                 [ngClass]="{ 'border-0 pb-0': last }">
+              <div class="w-11 h-11 bg-green-50 rounded-md flex flex-col items-center justify-center shrink-0">
+                <span class="text-base font-semibold text-green-700 leading-none">{{ getDay(w.date) }}</span>
+                <span class="text-[9px] text-green-600 uppercase mt-0.5 tracking-wider">{{ getMonth(w.date) }}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 class="text-[13px] font-medium text-gray-900 mb-1 truncate">{{ w.programTitle }}</h4>
+                <p class="text-xs text-gray-500 flex items-center gap-1">
+                  <i class="ti ti-map-pin" aria-hidden="true"></i>
+                  {{ w.location }}
+                </p>
+                <div class="flex items-center gap-2 mt-1.5">
+                  <span class="flex items-center gap-1 text-[11px] text-gray-400">
+                    <i class="ti ti-clock" aria-hidden="true"></i>
+                    {{ getTime(w.date) }}
+                  </span>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border" [ngClass]="getStatusClass(w.status)">
+                    {{ w.status }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+       
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-5">
+            <div class="text-base font-semibold text-gray-900 mb-4">Farm Profile</div>
+            
+            <div class="mb-3.5">
+              <div class="flex justify-between items-start py-2.5 border-b border-gray-100 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Farmer ID</span>
+                <span class="text-xs font-mono tracking-wide font-medium text-gray-900 text-right">FRM-{{ farmer.farmerId || '----' }}</span>
+              </div>
+              <div class="flex justify-between items-start py-2.5 border-b border-gray-100 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Date of Birth</span>
+                <span class="text-[13px] font-medium text-gray-900 text-right">{{ formatDate(farmer.dob) }}</span>
+              </div>
+              <div class="flex justify-between items-start py-2.5 border-b border-gray-100 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Gender</span>
+                <span class="text-[13px] font-medium text-gray-900 text-right">{{ farmer.gender || 'N/A' }}</span>
+              </div>
+              <div class="flex justify-between items-start py-2.5 border-b border-gray-100 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Address</span>
+                <span class="text-xs font-normal max-w-[220px] leading-relaxed text-gray-900 text-right">{{ farmer.address || 'N/A' }}</span>
+              </div>
+              <div class="flex justify-between items-start py-2.5 border-b border-gray-100 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Land Size</span>
+                <span class="text-[13px] font-medium text-gray-900 text-right">{{ farmer.landSize || 0 }} Acres</span>
+              </div>
+              <div class="flex justify-between items-start py-2.5 border-b border-gray-100 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Crop Type</span>
+                <span class="text-[13px] font-medium text-gray-900 text-right">{{ farmer.cropType || 'N/A' }}</span>
+              </div>
+              <div class="flex justify-between items-start py-2.5 border-b border-gray-100 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Contact</span>
+                <span class="text-[13px] font-medium text-gray-900 text-right">{{ farmer.contactInfo || 'N/A' }}</span>
+              </div>
+              <div class="flex justify-between items-start py-2.5 gap-3">
+                <span class="text-xs text-gray-500 shrink-0">Status</span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border" 
+                      [ngClass]="farmer.status === 'Active' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-gray-50 text-gray-700 border-gray-200'">
+                  {{ farmer.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+       
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="flex h-screen bg-gray-50">
+  
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    
+    <app-header></app-header>
+
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+      <div class="max-w-[860px] mx-auto p-4 sm:p-6 lg:p-8">
+       
+        <div class="mb-6">
+          <h1 class="text-[22px] font-medium text-gray-900 mb-1 tracking-tight">Training Programs</h1>
+          <p class="text-[13px] text-gray-500">Browse programs and click to view available workshops for registration.</p>
+        </div>
+       
+        <div *ngIf="loading" class="flex flex-col items-center justify-center py-16 px-6 bg-white border border-gray-200 rounded-lg text-center gap-3 shadow-sm">
+          <i class="ti ti-loader text-4xl text-gray-300 animate-spin" aria-hidden="true"></i>
+          <p class="text-sm font-medium text-gray-600">Loading training programs...</p>
+        </div>
+       
+        <div *ngIf="!loading && programs.length === 0" class="flex flex-col items-center justify-center py-16 px-6 bg-white border border-gray-200 rounded-lg text-center gap-3 shadow-sm">
+          <i class="ti ti-calendar-off text-4xl text-gray-300" aria-hidden="true"></i>
+          <p class="text-sm font-medium text-gray-600">No training programs available right now.</p>
+        </div>
+       
+        <div class="flex flex-col gap-3.5" *ngIf="!loading && programs.length > 0">
+          <div class="bg-white border border-gray-200 rounded-lg transition-all hover:border-green-500 hover:shadow-sm overflow-hidden" *ngFor="let p of programs">
+            
+            <div class="p-4 sm:p-5 cursor-pointer flex justify-between items-start" (click)="toggleWorkshops(p.programId)">
+              <div class="flex-1 min-w-0">
+                <span class="inline-flex items-center px-2 py-0.5 border rounded text-[11px] font-semibold uppercase tracking-wider mb-2" 
+                      [ngClass]="getStatusClass(p.status)">
+                  {{ p.status }}
+                </span>
+                <h3 class="text-[16px] font-medium text-gray-900 leading-tight mb-2">{{ p.title }}</h3>
+                <p class="text-[13px] text-gray-500 leading-relaxed mb-4">{{ p.description }}</p>
+                
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center gap-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded px-2 py-1">
+                    <i class="ti ti-calendar text-gray-400" aria-hidden="true"></i>
+                    {{ formatDateRange(p.startDate, p.endDate) }}
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded px-2 py-1" *ngIf="p.programId">
+                    <i class="ti ti-id text-gray-400" aria-hidden="true"></i>
+                    PRG-{{ p.programId }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="shrink-0 ml-4 pt-1">
+                <div class="p-2 rounded-full bg-gray-50 text-gray-500 border border-gray-200 transition-transform duration-200"
+                     [ngClass]="{'rotate-180 bg-green-50 text-green-600 border-green-200': expandedProgramId === p.programId}">
+                  <i class="ti ti-chevron-down text-lg"></i>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="expandedProgramId === p.programId" class="border-t border-gray-200 bg-gray-50/50">
+              
+              <div *ngIf="loadingWorkshops" class="p-8 text-center text-sm text-gray-500">
+                <i class="ti ti-loader animate-spin inline-block mr-2"></i> Loading workshops...
+              </div>
+
+              <div *ngIf="!loadingWorkshops && workshops.length === 0" class="p-8 text-center text-sm text-gray-500">
+                No workshops scheduled for this program yet.
+              </div>
+
+              <div *ngIf="!loadingWorkshops && workshops.length > 0" class="p-4 sm:p-5 space-y-3">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 px-1">Available Workshops</h4>
+                
+                <div *ngFor="let w of workshops" class="bg-white border border-gray-200 p-4 rounded-md shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div>
+                    <h5 class="text-sm font-semibold text-gray-900 mb-1">{{ w.title }}</h5>
+                    <div class="flex flex-wrap gap-3 text-xs text-gray-500 font-medium">
+                      <span class="flex items-center gap-1"><i class="ti ti-calendar-event"></i> {{ w.date | date:'MMM d, y, h:mm a' }}</span>
+                      <span class="flex items-center gap-1"><i class="ti ti-map-pin"></i> {{ w.location }}</span>
+                    </div>
+                  </div>
+                  
+                  <button (click)="registerForWorkshop($event, w)" 
+                          class="relative z-10 shrink-0 w-full sm:w-auto inline-flex justify-center items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-[13px] font-medium transition-colors shadow-sm cursor-pointer">
+                    
+                    <ng-container *ngIf="registeringWorkshopId === (w.workshopId || w.workshopId); else defaultBtn">
+                      <i class="ti ti-loader animate-spin" aria-hidden="true"></i> Registering...
+                    </ng-container>
+                    
+                    <ng-template #defaultBtn>
+                      <i class="ti ti-user-plus" aria-hidden="true"></i> Register
+                    </ng-template>
+
+                  </button>
+                </div>
+              </div>
+              
+            </div>
+            </div>
+        </div>
+       
+      </div>
+    </main>
+  </div>
+</div>
