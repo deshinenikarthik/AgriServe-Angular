@@ -1,0 +1,70 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+  <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center bg-slate-50/50">
+    <h2 class="text-lg font-bold text-gray-900">Recent Audits</h2>
+    <a routerLink="/compliance/audits" class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+      View All Audits &rarr;
+    </a>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50/50">
+        <tr>
+          <!-- Center-aligned headers -->
+          <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Audit ID</th>
+          <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Scope</th>
+          <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Findings</th>
+          <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Officer</th>
+          <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        
+        <tr *ngFor="let audit of audits" class="hover:bg-gray-50 transition-colors">
+          
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-center">
+            #AUD-{{ audit.auditId }}
+          </td>
+          
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium text-center">
+            {{ audit.scope }}
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex justify-center">
+              <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border"
+                    [ngClass]="getStatusClass(audit.status)">
+                {{ formatStatus(audit.status) }}
+              </span>
+            </div>
+          </td>
+
+          <!-- Truncated findings so it doesn't break table width -->
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center max-w-xs truncate" [title]="audit.findings">
+            {{ audit.findings || 'No findings recorded.' }}
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center justify-center gap-2">
+            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700">
+              {{ audit.officerName.charAt(0) }}
+            </div>
+            {{ audit.officerName }}
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+            {{ audit.date | date:'mediumDate' }}
+          </td>
+        </tr>
+
+        <!-- Empty State -->
+        <tr *ngIf="audits.length === 0">
+          <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">
+            No recent audits found.
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>

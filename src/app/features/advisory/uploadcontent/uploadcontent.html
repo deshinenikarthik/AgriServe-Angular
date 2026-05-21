@@ -1,0 +1,83 @@
+<div class="flex h-screen bg-slate-50 overflow-hidden text-slate-900 font-sans">
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <app-header></app-header>
+
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+      <div class="py-12 px-6 flex justify-center">
+        
+        <div class="w-full max-w-3xl bg-white rounded-3xl p-10 border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+          
+          <div class="text-center mb-10">
+            <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Upload Advisory Content</h1>
+            <p class="text-slate-500 text-sm mt-2">
+              Extension Officer Portal • <span class="text-indigo-600 font-bold">Ready to Publish</span>
+            </p>
+          </div>
+
+          <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium">
+            {{ errorMessage }}
+          </div>
+
+          <form [formGroup]="uploadForm" (ngSubmit)="onUpload()" class="space-y-6">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Content Title</label>
+                <input type="text" formControlName="title" 
+                       placeholder="e.g. Early Blight Management"
+                       [ngClass]="{'border-red-300 focus:ring-red-500': f['title'].invalid && f['title'].touched}"
+                       class="w-full p-3.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 font-medium">
+                <p *ngIf="f['title'].invalid && f['title'].touched" class="text-red-500 text-xs mt-1.5 font-medium">Title is required (min 5 characters).</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Category</label>
+                <select formControlName="category" class="w-full p-3.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 font-medium">
+                  <option value="Crop Advisory">Crop Advisory</option>
+                  <option value="Soil Management">Soil Management</option>
+                  <option value="Market Intelligence">Market Intelligence</option>
+                  <option value="Others">Others</option>
+
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detailed Description</label>
+              <textarea formControlName="description" rows="6"
+                        placeholder="Provide detailed advisory notes for farmers..."
+                        [ngClass]="{'border-red-300 focus:ring-red-500': f['description'].invalid && f['description'].touched}"
+                        class="w-full p-4 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 leading-relaxed"></textarea>
+              <p *ngIf="f['description'].invalid && f['description'].touched" class="text-red-500 text-xs mt-1.5 font-medium">Description must be at least 20 characters.</p>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-100 p-6 rounded-2xl">
+              <div class="flex items-center gap-2 mb-4 font-bold text-slate-700 text-sm">
+                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                Resource URL
+              </div>
+              <input type="text" formControlName="fileUri" 
+                     placeholder="https://resource-link.com/file.pdf"
+                     [ngClass]="{'border-red-300 focus:ring-red-500': f['fileUri'].invalid && f['fileUri'].touched}"
+                     class="w-full p-3.5 rounded-xl border border-white bg-white shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-600 text-sm">
+              <p *ngIf="f['fileUri'].invalid && f['fileUri'].touched" class="text-red-500 text-xs mt-2 font-medium">Please provide a valid https link.</p>
+            </div>
+
+            <div class="flex justify-end items-center gap-6 pt-4">
+              <button type="button" routerLink="/officer/advisory/content" class="text-slate-400 hover:text-slate-600 font-bold text-sm transition-colors uppercase tracking-widest">
+                Cancel
+              </button>
+              <button type="submit" [disabled]="isSubmitting"
+                      class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white h-14 px-10 rounded-xl font-bold transition-all shadow-[0_4px_15px_rgba(63,81,181,0.3)] hover:shadow-indigo-200 active:scale-95 uppercase tracking-widest text-sm">
+                {{ isSubmitting ? 'Uploading...' : 'Upload Content' }}
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

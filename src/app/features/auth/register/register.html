@@ -1,0 +1,161 @@
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+  
+  <div *ngIf="toastMessage" class="fixed top-6 right-6 z-[9999] transition-all duration-300">
+    <div class="flex items-center gap-3 px-6 py-4 rounded-md shadow-2xl border-l-4 bg-white"
+         [ngClass]="{
+           'border-green-500': toastType === 'success',
+           'border-red-500': toastType === 'error'
+         }">
+      
+      <svg *ngIf="toastType === 'success'" class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      
+      <svg *ngIf="toastType === 'error'" class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      
+      <div>
+        <h3 class="text-sm font-bold text-gray-900">
+          {{ toastType === 'success' ? 'Success!' : 'Registration Failed' }}
+        </h3>
+        <p class="text-xs text-gray-500 mt-1">{{ toastMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="sm:mx-auto sm:w-full sm:max-w-2xl">
+    <div class="flex justify-center">
+      <img src="/assets/logo.png" alt="AgriServe Logo" class="h-20 w-auto drop-shadow-sm">
+    </div>
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      Welcome to AgriServe
+    </h2>
+    <p class="mt-2 text-center text-sm text-gray-600">
+      Create your digital farmer account to get started
+    </p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100">
+      
+      <form class="space-y-6" (ngSubmit)="onSubmit()" #registerForm="ngForm">
+        
+        <div class="grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-2">
+          
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+            <div class="mt-1">
+              <input id="name" name="name" type="text" placeholder="John Doe" required
+                [(ngModel)]="registerData.name"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+            <div class="mt-1">
+              <input id="email" name="email" type="email" placeholder="farm12@example.com" required
+                [(ngModel)]="registerData.email"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <div class="mt-1">
+              <input id="password" name="password" type="password" placeholder="••••••••" required
+                [(ngModel)]="registerData.password"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="contactInfo" class="block text-sm font-medium text-gray-700">Contact Number</label>
+            <div class="mt-1">
+              <input id="contactInfo" name="contactInfo" type="tel" placeholder="94xxxxxxxx" required pattern="[0-9]{10}"
+                [(ngModel)]="registerData.contactInfo"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="dob" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+            <div class="mt-1">
+              <input id="dob" name="dob" type="date" required
+                [(ngModel)]="registerData.dob"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+            <div class="mt-1">
+              <select id="gender" name="gender" required
+                [(ngModel)]="registerData.gender"
+                class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                <option value="" disabled selected>Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+            <div class="mt-1">
+              <input id="role" name="role" type="text" readonly
+                [(ngModel)]="registerData.role"
+                class="appearance-none block w-full px-3 py-2 border border-gray-200 bg-gray-50 text-gray-500 rounded-md shadow-sm cursor-not-allowed sm:text-sm">
+            </div>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+            <div class="mt-1">
+              <input id="address" name="address" type="text" placeholder="123, ABC Nagar, XYZ - 123456" required
+                [(ngModel)]="registerData.address"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="landSize" class="block text-sm font-medium text-gray-700">Land Size</label>
+            <div class="mt-1">
+              <input id="landSize" name="landSize" type="number" step="0.1" placeholder="in Acres/Hectares" required
+                [(ngModel)]="registerData.landSize"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label for="cropType" class="block text-sm font-medium text-gray-700">Primary Crop Type</label>
+            <div class="mt-1">
+              <input id="cropType" name="cropType" type="text" placeholder="Paddy, Maize etc." required
+                [(ngModel)]="registerData.cropType"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            </div>
+          </div>
+
+        </div> <div class="pt-4">
+          <button type="submit" [disabled]="isLoading || registerForm.invalid"
+            class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out disabled:opacity-50">
+            {{ isLoading ? 'Registering Account...' : 'Register Account' }}
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">
+          Already have an account? 
+          <a routerLink="/login" class="font-medium text-green-600 hover:text-green-500 transition duration-150 ease-in-out">
+            Sign in here
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

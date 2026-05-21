@@ -1,0 +1,65 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-100">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Compliance ID</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Type</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Entity ID</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Officer</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Result</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Date</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        
+        <ng-container *ngFor="let record of records">
+          
+          <tr class="hover:bg-gray-50/80 transition-colors cursor-pointer group"
+              [ngClass]="{'bg-indigo-50/30': expandedRecordId === record.complianceId}"
+              (click)="toggleDetails(record.complianceId)">
+            
+            <td class="px-6 py-4 text-sm font-bold text-gray-900">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" 
+                     [ngClass]="{'rotate-180 text-indigo-600': expandedRecordId === record.complianceId}" 
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+                #CR-{{ record.complianceId }}
+              </div>
+            </td>
+            
+            <td class="px-6 py-4 text-sm text-gray-700 font-medium">{{ formatType(record.type) }}</td>
+            <td class="px-6 py-4 text-sm text-gray-500">ID: {{ record.entityId }}</td>
+            <td class="px-6 py-4 text-sm text-gray-500">{{ record.officerName }}</td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 text-xs font-semibold rounded-full border" [ngClass]="getResultBadgeClass(record.result)">
+                {{ formatType(record.result) }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500">{{ record.date | date:'mediumDate' }}</td>
+          </tr>
+
+          <tr *ngIf="expandedRecordId === record.complianceId" class="bg-slate-50/50">
+            <td colspan="6" class="px-8 py-5 border-b border-gray-100">
+              <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex items-start gap-3">
+                <div class="mt-0.5">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Officer Notes</h4>
+                  <p class="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">{{ record.notes || 'No notes provided for this record.' }}</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          
+        </ng-container>
+
+      </tbody>
+    </table>
+  </div>
+</div>

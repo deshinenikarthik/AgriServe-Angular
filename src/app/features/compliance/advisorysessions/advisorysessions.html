@@ -1,0 +1,38 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-100">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Session ID</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Content Title</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Farmer</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Officer</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Date</th>
+          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Status</th>
+          <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr *ngFor="let session of sessions" class="hover:bg-gray-50/50 transition-colors">
+          <td class="px-6 py-4 text-sm font-bold text-gray-900">#AS-{{ session.sessionId }}</td>
+          <td class="px-6 py-4 text-sm text-gray-700 font-medium">{{ session.contentTitle }}</td>
+          <td class="px-6 py-4 text-sm text-gray-500">{{ session.farmerName }}</td>
+          <td class="px-6 py-4 text-sm text-gray-500">{{ session.officerName }}</td>
+          <td class="px-6 py-4 text-sm text-gray-500">{{ session.date | date:'short' }}</td>
+          <td class="px-6 py-4">
+            <span class="px-2.5 py-1 text-xs font-semibold rounded-full border" [ngClass]="getStatusClass(session.status)">
+              {{ session.status }}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-center">
+            <button 
+            (click)="fillRecord(session.sessionId)"
+            class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+              Fill Record
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

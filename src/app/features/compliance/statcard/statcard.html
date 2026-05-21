@@ -1,0 +1,13 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex justify-between items-center border-l-4 hover:shadow-md transition-shadow"
+     [ngClass]="borderClass">
+  <div>
+    <p class="text-sm font-medium text-gray-500 mb-1">{{ title }}</p>
+    <!-- When backend is connected, this value will update dynamically -->
+    <p class="text-3xl font-bold text-gray-900">{{ value }}</p>
+  </div>
+  <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+       [ngClass]="[iconBgClass, iconTextClass]"
+       [innerHTML]="iconSvg">
+    <!-- SVG is injected dynamically based on the input -->
+  </div>
+</div>

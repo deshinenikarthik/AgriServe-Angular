@@ -1,0 +1,47 @@
+<!-- Outer wrapper: Flexbox, full screen height, no scrolling on the body -->
+<div class="flex h-screen bg-gray-50 font-sans text-gray-900 overflow-hidden">
+  
+  <!-- 1. INJECT THE SIDEBAR -->
+  <app-sidebar></app-sidebar>
+
+  <!-- 2. MAIN CONTENT AREA (Takes up the rest of the space) -->
+  <div class="flex-1 flex flex-col overflow-hidden relative">
+    
+    <!-- Top Header Navigation -->
+    <app-header></app-header>
+
+    <!-- SCROLLABLE DASHBOARD CONTENT -->
+    <main class="flex-1 overflow-y-auto p-8">
+      
+      <!-- Page Title -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Compliance Officer Dashboard</h1>
+        <p class="mt-2 text-base text-gray-500">System-wide overview of farm compliance and pending audits.</p>
+      </div>
+
+      <!-- MODULAR STAT CARDS: Iterating through the data array -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-10">
+        <app-statcard *ngFor="let stat of dashboardStats"
+          [title]="stat.title"
+          [value]="stat.value"
+          [borderClass]="stat.border"
+          [iconBgClass]="stat.bg"
+          [iconTextClass]="stat.text"
+          [iconSvg]="stat.icon">
+        </app-statcard>
+      </div>
+
+      <!-- MODULAR TABLES: Centered on screen, stacked vertically -->
+      <div class="mx-auto max-w-6xl w-full flex flex-col gap-8">
+        
+        <!-- 1. Top Table: Compliance Records -->
+        <app-recentcompliancerecords></app-recentcompliancerecords>
+        
+        <!-- 2. Bottom Table: Audits -->
+        <app-recentaudits></app-recentaudits>
+        
+      </div>
+
+    </main>
+  </div>
+</div>

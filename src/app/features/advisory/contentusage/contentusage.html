@@ -1,0 +1,110 @@
+<div class="flex flex-col gap-8 w-full">
+  
+  <div class="flex justify-between items-center">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Usage Analytics</h2>
+      <p class="text-sm text-slate-500 mt-1">Monitor content engagement and feedback</p>
+    </div>
+    <button (click)="fetchUsageData()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg px-5 py-2.5 transition-colors flex items-center shadow-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+      </svg>
+      Refresh Stats
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1">
+      <svg class="w-9 h-9 mb-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+      <div class="text-3xl font-extrabold text-slate-800 mb-1">{{totalContent}}</div>
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Library Items</div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1">
+      <svg class="w-9 h-9 mb-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+      <div class="text-3xl font-extrabold text-slate-800 mb-1">{{totalSessions}}</div>
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Total Sessions</div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1">
+      <svg class="w-9 h-9 mb-3 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      <div class="text-3xl font-extrabold text-slate-800 mb-1">{{uniqueFarmers}}</div>
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Farmers Reached</div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_4px_12px_rgba(0,0,0,0.03)] flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1">
+      <svg class="w-9 h-9 mb-3 text-amber-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+      <div class="text-3xl font-extrabold text-slate-800 mb-1">{{avgScore}}</div>
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Avg Score</div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-slate-100 overflow-hidden w-full">
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-left">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-100">
+            <th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Content Title</th>
+            <th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Sessions</th>
+            <th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Avg Feedback</th>
+            <th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of effectivenessData" class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+            <td class="px-6 py-5 text-sm font-semibold text-slate-800">{{item.title}}</td>
+            <td class="px-6 py-5 text-sm text-slate-600">
+              <span [class.font-semibold]="item.sessions > 0" [class.text-indigo-600]="item.sessions > 0">
+                {{item.sessions}} sessions
+              </span>
+            </td>
+            <td class="px-6 py-5">
+              <span class="bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full font-bold text-xs border border-amber-100 inline-block">
+                {{item.feedback}} ⭐
+              </span>
+            </td>
+            <td class="px-6 py-5 text-sm text-slate-600 flex items-center">
+              <span class="w-2.5 h-2.5 rounded-full inline-block mr-2.5"
+                    [ngClass]="item.status === 'Active' ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-slate-300'">
+              </span>
+              <span class="font-medium">{{item.status}}</span>
+            </td>
+            <td class="px-6 py-5">
+              <button class="bg-white border-2 border-indigo-600 text-indigo-600 px-4 py-1.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:bg-indigo-600 hover:text-white hover:shadow-[0_4px_12px_rgba(63,81,181,0.2)]" 
+                      (click)="showDetails(item)">
+                Details
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="selectedDetail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-[1000]">
+    <div class="bg-white p-8 w-[90%] max-w-md rounded-3xl relative shadow-2xl">
+      
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-slate-800">Content Breakdown</h3>
+        <svg (click)="closeDetails()" class="w-6 h-6 text-slate-400 hover:text-slate-800 cursor-pointer transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </div>
+      
+      <div>
+        <h4 class="text-lg font-semibold text-slate-800 mb-4">{{selectedDetail.title}}</h4>
+        
+        <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 mb-6">
+          <p class="text-slate-600 text-sm leading-relaxed m-0">
+            This content has been used in <strong class="text-indigo-600">{{selectedDetail.sessions}}</strong> sessions with unique farmers.
+          </p>
+        </div>
+        
+        <button (click)="closeDetails()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold w-full py-3 rounded-xl transition-colors shadow-sm tracking-wide">
+          CLOSE
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

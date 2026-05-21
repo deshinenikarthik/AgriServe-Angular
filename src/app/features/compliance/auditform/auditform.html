@@ -1,0 +1,73 @@
+<div class="flex h-screen bg-gray-50/50 font-sans text-gray-900 overflow-hidden justify-center items-center p-8">
+  <div class="w-full max-w-2xl bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    
+    <div class="px-8 py-6 border-b border-gray-100 bg-gray-50/50">
+      <h2 class="text-2xl font-bold text-gray-900">
+        {{ isUpdateMode ? 'Update Audit Record' : 'Create New Audit' }}
+      </h2>
+      <p class="text-sm text-gray-500 mt-1">Fill out the details below to schedule or record a new audit.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="p-8 space-y-6">
+      
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Audit Scope *</label>
+        <input 
+          type="text" 
+          name="scope"
+          [(ngModel)]="auditData.scope" 
+          placeholder="e.g., Q3 Water Usage Compliance, Soil Quality Check"
+          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
+          required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Initial Status</label>
+        <select 
+          name="status"
+          [(ngModel)]="auditData.status"
+          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm bg-white">
+          <option value="PENDING">Pending</option>
+          <option value="IN_PROGRESS">In Progress</option>
+          <option value="COMPLETED">Completed</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Initial Findings / Notes</label>
+        <textarea 
+          name="findings"
+          [(ngModel)]="auditData.findings"
+          rows="4" 
+          placeholder="Enter any initial observations or leave blank if scheduling for the future..."
+          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm resize-none"></textarea>
+      </div>
+
+      <div class="pt-4 flex items-center justify-end gap-4 border-t border-gray-100 mt-6">
+        <button 
+          type="button" 
+          (click)="cancel()"
+          class="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="isSubmitting" ...>
+          <span *ngIf="isSubmitting" class="...">...</span>
+          {{ isSubmitting ? 'Saving...' : (isUpdateMode ? 'Update Audit' : 'Save Audit') }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <div *ngIf="toastMessage" class="fixed bottom-8 right-8 z-[100] animate-slide-up">
+  <div class="flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border-l-4"
+       [ngClass]="{
+         'bg-white border-green-500 shadow-green-100': toastType === 'success',
+         'bg-white border-red-500 shadow-red-100': toastType === 'error'
+       }">
+    <i class="ti text-xl" 
+       [ngClass]="toastType === 'success' ? 'ti-circle-check text-green-500' : 'ti-alert-circle text-red-500'"></i>
+    <span class="text-sm font-bold text-slate-800">{{ toastMessage }}</span>
+  </div>
+</div>
+</div>

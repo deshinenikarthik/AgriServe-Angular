@@ -1,0 +1,105 @@
+<div class="flex h-screen bg-gray-50 overflow-hidden text-gray-900 font-sans">
+  
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+    
+    <app-header></app-header>
+
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+      
+      <div class="p-10 max-w-7xl mx-auto">
+        
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+          <div>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Content Library</h1>
+            <p class="text-slate-500 text-sm mt-1">Browse and manage agricultural advisory resources.</p>
+          </div>
+          
+        
+        </div>
+
+        <!-- <div class="flex flex-wrap gap-2 mb-8">
+          <button (click)="filterByCategory('All')"
+                  [ngClass]="selectedCategory === 'All' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'"
+                  class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200">
+            All
+          </button>
+          <button (click)="filterByCategory('Crop')"
+                  [ngClass]="selectedCategory === 'Crop' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'"
+                  class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200">
+            Crop
+          </button>
+          <button (click)="filterByCategory('Soil')"
+                  [ngClass]="selectedCategory === 'Soil' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'"
+                  class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200">
+            Soil
+          </button>
+          <button (click)="filterByCategory('Market')"
+                  [ngClass]="selectedCategory === 'Market' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'"
+                  class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200">
+            Market
+          </button>
+        </div> -->
+
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6" *ngIf="!selectedItem">
+          <div 
+            class="bg-white rounded-xl border border-slate-100 p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:shadow-[0_12px_24px_rgba(0,0,0,0.06)]" 
+            *ngFor="let item of filteredItems" 
+            (click)="viewDetails(item)"
+          >
+            <div>
+              <span class="text-[10px] font-extrabold px-3 py-1 rounded-md uppercase bg-indigo-50 text-indigo-600 inline-block mb-3" [attr.data-category]="item.category">
+                {{item.category}}
+              </span>
+              <h3 class="text-lg font-semibold text-gray-900 m-0 mb-2.5">{{item.title}}</h3>
+              <p class="text-slate-500 text-sm line-clamp-3 leading-relaxed">{{item.description}}</p>
+            </div>
+            <div class="flex justify-between items-center border-t border-slate-50 pt-4 mt-5">
+              <span class="text-indigo-600 font-semibold text-sm flex items-center gap-1 hover:text-indigo-700">
+                View Details 
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="selectedItem">
+          <button (click)="closeDetails()" class="flex items-center mb-5 text-indigo-600 font-medium hover:text-indigo-800 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Library
+          </button>
+          
+          <div class="bg-white p-10 rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+            <div class="mb-6">
+              <span class="text-[10px] font-extrabold px-3 py-1 rounded-md uppercase bg-indigo-50 text-indigo-600 inline-block">
+                {{selectedItem.category}}
+              </span>
+              <h2 class="text-3xl font-bold my-4 text-slate-800">{{selectedItem.title}}</h2>
+            </div>
+            
+            <div>
+              <p class="text-lg leading-relaxed text-slate-600 mb-8">{{selectedItem.description}}</p>
+              
+              <div class="mb-8 p-5 bg-slate-50 rounded-xl space-y-2 text-sm text-slate-700">
+                <p><strong class="text-slate-900">Resource ID:</strong> #{{selectedItem.contentId}}</p>
+              </div>
+              
+              <button (click)="downloadResource(selectedItem.fileUri)" class="inline-flex items-center px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-sm transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                Download Resource
+              </button>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+</div>
